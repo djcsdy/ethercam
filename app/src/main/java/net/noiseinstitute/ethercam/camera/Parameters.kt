@@ -20,7 +20,7 @@ class Parameters(private val camera: Camera, previous: Parameters? = null) {
 
     val supportedFocusModes = focusModes.filter { it.value != null }.keys
 
-    var focusMode = FocusMode.Normal
+    var focusMode: FocusMode = FocusMode.Normal
         set(value) {
             val previous = parameters.focusMode
             focusModes[value]?.let {
