@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-const val PERMISSIONS_REQUEST_CAMERA = 0
+private const val PERMISSIONS_REQUEST_CAMERA = 0
 
 class CameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
 
