@@ -12,7 +12,6 @@ class Camera(
     private val requestPermission: () -> Unit
 ) {
     private var camera: android.hardware.Camera? = null
-    private var parameters: Parameters? = null
     private var surfaceHolder: SurfaceHolder? = null
 
     private val surfaceHolderCallback = object : SurfaceHolder.Callback {
@@ -72,7 +71,7 @@ class Camera(
         }
 
         camera?.let {
-            parameters = Parameters(it, parameters)
+            setParameters(it)
 
             // TODO camera orientation
             it.setPreviewDisplay(surfaceHolder)
