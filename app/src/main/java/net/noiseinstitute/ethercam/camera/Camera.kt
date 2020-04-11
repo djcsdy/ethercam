@@ -3,7 +3,6 @@ package net.noiseinstitute.ethercam.camera
 import android.Manifest
 import android.content.Context
 import android.content.pm.PackageManager
-import android.util.Log
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
@@ -69,6 +68,12 @@ class Camera(
     private fun startCameraWithPermission() {
         if (camera == null) {
             camera = android.hardware.Camera.open()
+        }
+
+        val parameters = camera?.parameters
+        if (parameters != null) {
+            parameters.focusMode = android.hardware.Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
+            camera?.parameters = parameters
         }
 
         // TODO camera parameters
