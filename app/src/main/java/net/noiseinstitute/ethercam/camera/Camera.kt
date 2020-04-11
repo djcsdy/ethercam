@@ -12,6 +12,7 @@ class Camera(
     private val requestPermission: () -> Unit
 ) {
     private var camera: android.hardware.Camera? = null
+    private var parameters: Parameters? = null
     private var surfaceHolder: SurfaceHolder? = null
 
     private val surfaceHolderCallback = object : SurfaceHolder.Callback {
@@ -70,16 +71,13 @@ class Camera(
             camera = android.hardware.Camera.open()
         }
 
-        val parameters = camera?.parameters
-        if (parameters != null) {
-            parameters.focusMode = android.hardware.Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO
-            camera?.parameters = parameters
-        }
+        camera?.let {
+            parameters = Parameters(it, parameters)
 
-        // TODO camera parameters
-        // TODO camera orientation
-        camera?.setPreviewDisplay(surfaceHolder)
-        camera?.startPreview()
+            // TODO camera orientation
+            it.setPreviewDisplay(surfaceHolder)
+            it.startPreview()
+        }
     }
 
     private fun stopCamera() {
