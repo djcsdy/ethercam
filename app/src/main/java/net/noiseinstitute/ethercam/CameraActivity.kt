@@ -8,7 +8,6 @@ import android.view.SurfaceView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import net.noiseinstitute.ethercam.http_server.HttpServer
 
 const val PERMISSIONS_REQUEST_CAMERA = 0
 
@@ -23,8 +22,6 @@ class CameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
 
     override fun onStart() {
         super.onStart()
-
-        HttpServer().start()
     }
 
     override fun onResume() {
