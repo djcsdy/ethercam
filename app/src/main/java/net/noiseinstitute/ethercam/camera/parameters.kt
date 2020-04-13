@@ -2,12 +2,9 @@ package net.noiseinstitute.ethercam.camera
 
 import android.hardware.Camera
 import android.util.Log
-import java.lang.RuntimeException
 
 fun setParameters(camera: Camera): Unit {
     val parameters = camera.parameters
-
-    val defaultFocusMode = parameters.focusMode
 
     listOf(
         Camera.Parameters.FOCUS_MODE_CONTINUOUS_VIDEO,
@@ -15,14 +12,33 @@ fun setParameters(camera: Camera): Unit {
         Camera.Parameters.FOCUS_MODE_INFINITY
     )
         .firstOrNull { parameters.supportedFocusModes.contains(it) }
-        ?.let {
-            parameters.focusMode = it
-
-            try {
-                camera.parameters = parameters
-            } catch (e: RuntimeException) {
-                Log.w("Ethercam", "Failed to set focus mode", e)
-                parameters.focusMode = defaultFocusMode
+        ?.let { focusMode ->
+            when (val result = trySetParameters(camera) { it.focusMode = focusMode }) {
+                is TrySetParametersResult.Error -> Log.w(
+                    "Ethercam",
+                    "Failed to set focus mode",
+                    result.error
+                )
+                else -> null
             }
         }
+}
+
+sealed class TrySetParametersResult {
+    object Success : TrySetParametersResult()
+    data class Error(val error: RuntimeException) : TrySetParametersResult()
+}
+
+fun trySetParameters(
+    camera: Camera,
+    set: (parameters: Camera.Parameters) -> Unit
+): TrySetParametersResult {
+    val parameters = camera.parameters
+    set(parameters)
+    try {
+        camera.parameters = parameters
+    } catch (e: RuntimeException) {
+        return TrySetParametersResult.Error(e)
+    }
+    return TrySetParametersResult.Success
 }
