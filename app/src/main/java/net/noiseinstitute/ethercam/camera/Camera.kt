@@ -71,7 +71,7 @@ class Camera(
         }
 
         camera?.let {
-            setParameters(it)
+            setFocusMode(it)
 
             // TODO camera orientation
             it.setPreviewDisplay(surfaceHolder)
