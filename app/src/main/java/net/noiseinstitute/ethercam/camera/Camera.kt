@@ -1,14 +1,14 @@
 package net.noiseinstitute.ethercam.camera
 
 import android.Manifest
-import android.content.Context
+import android.app.Activity
 import android.content.pm.PackageManager
 import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
 
 class Camera(
-    private val context: Context,
+    private val activity: Activity,
     private val requestPermission: () -> Unit
 ) {
     private var camera: android.hardware.Camera? = null
@@ -56,7 +56,7 @@ class Camera(
     private fun startCamera() {
         if (
             camera == null
-            && ContextCompat.checkSelfPermission(context, Manifest.permission.CAMERA)
+            && ContextCompat.checkSelfPermission(activity, Manifest.permission.CAMERA)
             != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermission()
@@ -72,8 +72,8 @@ class Camera(
 
         camera?.let {
             setFocusMode(it)
+            setOrientation(activity, it)
 
-            // TODO camera orientation
             it.setPreviewDisplay(surfaceHolder)
             it.startPreview()
         }
