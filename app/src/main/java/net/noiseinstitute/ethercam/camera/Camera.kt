@@ -72,7 +72,7 @@ internal class Camera(
 
         camera?.let {
             setFocusMode(it)
-            setOrientation(activity, it)
+            it.setDisplayOrientation(calculateDisplayOrientation(activity, it))
 
             it.setPreviewDisplay(surfaceHolder)
             it.startPreview()
