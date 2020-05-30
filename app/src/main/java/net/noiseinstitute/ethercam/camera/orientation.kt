@@ -4,7 +4,7 @@ import android.app.Activity
 import android.hardware.Camera
 import android.view.Surface
 
-fun setOrientation(activity: Activity, camera: Camera) {
+internal fun setOrientation(activity: Activity, camera: Camera) {
     val info = Camera.CameraInfo()
     Camera.getCameraInfo(0, info)
 

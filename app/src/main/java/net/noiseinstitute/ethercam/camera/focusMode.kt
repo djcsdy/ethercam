@@ -3,7 +3,7 @@ package net.noiseinstitute.ethercam.camera
 import android.hardware.Camera
 import android.util.Log
 
-fun setFocusMode(camera: Camera) {
+internal fun setFocusMode(camera: Camera) {
     val parameters = camera.parameters
 
     listOf(

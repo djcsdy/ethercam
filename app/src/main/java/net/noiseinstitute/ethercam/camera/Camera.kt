@@ -7,7 +7,7 @@ import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.core.content.ContextCompat
 
-class Camera(
+internal class Camera(
     private val activity: Activity,
     private val requestPermission: () -> Unit
 ) {

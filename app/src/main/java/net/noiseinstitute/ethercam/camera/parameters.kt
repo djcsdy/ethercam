@@ -2,12 +2,12 @@ package net.noiseinstitute.ethercam.camera
 
 import android.hardware.Camera
 
-sealed class TrySetParametersResult {
+internal sealed class TrySetParametersResult {
     object Success : TrySetParametersResult()
     data class Error(val error: RuntimeException) : TrySetParametersResult()
 }
 
-fun trySetParameters(
+internal fun trySetParameters(
     camera: Camera,
     set: (parameters: Camera.Parameters) -> Unit
 ): TrySetParametersResult {
