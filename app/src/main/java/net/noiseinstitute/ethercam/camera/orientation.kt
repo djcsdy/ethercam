@@ -4,7 +4,7 @@ import android.app.Activity
 import android.hardware.Camera
 import android.view.Surface
 
-internal fun calculateDisplayOrientation(activity: Activity, camera: Camera): Int {
+internal fun calculateDisplayOrientation(activity: Activity): Int {
     val info = Camera.CameraInfo()
     Camera.getCameraInfo(0, info)
 

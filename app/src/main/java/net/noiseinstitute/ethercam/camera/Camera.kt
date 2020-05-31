@@ -81,7 +81,7 @@ internal class Camera(
 
         camera?.let { camera ->
             setFocusMode(camera)
-            val displayOrientation = calculateDisplayOrientation(activity, camera)
+            val displayOrientation = calculateDisplayOrientation(activity)
             camera.setDisplayOrientation(displayOrientation)
             view?.let { view ->
                 val previewSize = camera.parameters.previewSize
