@@ -16,6 +16,6 @@ internal fun calculateAspectRatio(
 internal fun setAspectRatio(view: CameraView, ratio: Double) {
     val constraintSet = ConstraintSet()
     constraintSet.clone(view.layout)
-    constraintSet.setDimensionRatio(view.viewId, ratio.toString())
+    constraintSet.setDimensionRatio(view.viewId, "v,$ratio")
     constraintSet.applyTo(view.layout)
 }
