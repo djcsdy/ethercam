@@ -15,7 +15,8 @@ internal class Camera(
     private val requestPermission: () -> Unit
 ) {
     private var camera: android.hardware.Camera? = null
-    private var view: CameraView? = null
+    private var layout: ConstraintLayout? = null
+    private var surfaceView: SurfaceView? = null
 
     private val displayListener = object : DisplayManager.DisplayListener {
         override fun onDisplayChanged(displayId: Int) {
@@ -31,31 +32,25 @@ internal class Camera(
         }
     }
 
-    fun start(layout: ConstraintLayout, viewId: Int) {
+    fun start(layout: ConstraintLayout, surfaceView: SurfaceView) {
         stop()
+
+        this.layout = layout
+        this.surfaceView = surfaceView
 
         val displayManager = ActivityCompat.getSystemService(activity, DisplayManager::class.java)
         displayManager?.registerDisplayListener(displayListener, Handler())
-
-        if (view == null) {
-            val surfaceView = layout.findViewById<SurfaceView>(viewId)
-            val surfaceHolder = surfaceView.holder
-
-            view = object : CameraView {
-                override val layout = layout
-                override val viewId = viewId
-                override val surfaceHolder = surfaceHolder
-            }
-        }
 
         startCamera()
     }
 
     fun stop() {
+        layout = null
+        surfaceView = null
+
         val displayManager = ActivityCompat.getSystemService(activity, DisplayManager::class.java)
         displayManager?.unregisterDisplayListener(displayListener)
         stopCamera()
-        view = null
     }
 
     private fun startCamera() {
@@ -80,10 +75,8 @@ internal class Camera(
 
         camera?.let { camera ->
             setFocusMode(camera)
-            view?.let { view ->
-                camera.setPreviewDisplay(view.surfaceHolder)
-                camera.startPreview()
-            }
+            surfaceView?.let { camera.setPreviewDisplay(it.holder) }
+            camera.startPreview()
         }
     }
 
@@ -96,10 +89,12 @@ internal class Camera(
         camera?.let { camera ->
             val displayOrientation = calculateDisplayOrientation(activity)
             camera.setDisplayOrientation(displayOrientation)
-            view?.let { view ->
-                val previewSize = camera.parameters.previewSize
-                val aspectRatio = calculateAspectRatio(previewSize, displayOrientation)
-                setAspectRatio(view, aspectRatio)
+            val previewSize = camera.parameters.previewSize
+            layout?.let {layout ->
+                surfaceView?.let {surfaceView ->
+                    val aspectRatio = calculateAspectRatio(previewSize, displayOrientation)
+                    setAspectRatio(layout, surfaceView, aspectRatio)
+                }
             }
         }
     }

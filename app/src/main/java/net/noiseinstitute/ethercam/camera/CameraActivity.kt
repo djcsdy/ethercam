@@ -26,7 +26,7 @@ class CameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
     override fun onResume() {
         super.onResume()
 
-        camera.start(findViewById(R.id.constraintLayout), R.id.previewSurfaceView)
+        camera.start(findViewById(R.id.constraintLayout), findViewById(R.id.previewSurfaceView))
     }
 
     override fun onPause() {
@@ -41,7 +41,7 @@ class CameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsR
         grantResults: IntArray
     ) {
         if (requestCode == PERMISSIONS_REQUEST_CAMERA) {
-            camera.start(findViewById(R.id.constraintLayout), R.id.previewSurfaceView)
+            camera.start(findViewById(R.id.constraintLayout), findViewById(R.id.previewSurfaceView))
         }
     }
 }

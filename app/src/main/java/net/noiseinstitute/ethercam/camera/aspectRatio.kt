@@ -1,6 +1,8 @@
 package net.noiseinstitute.ethercam.camera
 
 import android.hardware.Camera
+import android.view.SurfaceView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.constraintlayout.widget.ConstraintSet
 
 internal fun calculateAspectRatio(
@@ -13,9 +15,9 @@ internal fun calculateAspectRatio(
     }
 }
 
-internal fun setAspectRatio(view: CameraView, ratio: Double) {
+internal fun setAspectRatio(layout: ConstraintLayout, surfaceView: SurfaceView, ratio: Double) {
     val constraintSet = ConstraintSet()
-    constraintSet.clone(view.layout)
-    constraintSet.setDimensionRatio(view.viewId, "v,$ratio")
-    constraintSet.applyTo(view.layout)
+    constraintSet.clone(layout)
+    constraintSet.setDimensionRatio(surfaceView.id, "v,$ratio")
+    constraintSet.applyTo(layout)
 }
