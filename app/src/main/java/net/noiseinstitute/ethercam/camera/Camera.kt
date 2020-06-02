@@ -5,7 +5,6 @@ import android.app.Activity
 import android.content.pm.PackageManager
 import android.hardware.display.DisplayManager
 import android.os.Handler
-import android.view.SurfaceHolder
 import android.view.SurfaceView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
@@ -32,51 +31,31 @@ internal class Camera(
         }
     }
 
-    private val surfaceHolderCallback = object : SurfaceHolder.Callback {
-        override fun surfaceChanged(
-            surfaceHolder: SurfaceHolder?,
-            format: Int,
-            width: Int,
-            height: Int
-        ) {
-        }
-
-        override fun surfaceDestroyed(surfaceHolder: SurfaceHolder?) {
-            this@Camera.stopCamera()
-        }
-
-        override fun surfaceCreated(surfaceHolder: SurfaceHolder?) {
-            this@Camera.startCamera()
-        }
-    }
-
     fun start(layout: ConstraintLayout, viewId: Int) {
+        stop()
+
         val displayManager = ActivityCompat.getSystemService(activity, DisplayManager::class.java)
         displayManager?.registerDisplayListener(displayListener, Handler())
 
         if (view == null) {
             val surfaceView = layout.findViewById<SurfaceView>(viewId)
             val surfaceHolder = surfaceView.holder
-            surfaceHolder.addCallback(surfaceHolderCallback)
 
-            view = object :
-                CameraView {
+            view = object : CameraView {
                 override val layout = layout
                 override val viewId = viewId
                 override val surfaceHolder = surfaceHolder
             }
         }
+
+        startCamera()
     }
 
     fun stop() {
         val displayManager = ActivityCompat.getSystemService(activity, DisplayManager::class.java)
         displayManager?.unregisterDisplayListener(displayListener)
-
-        if (view != null) {
-            stopCamera()
-            view?.surfaceHolder?.removeCallback(surfaceHolderCallback)
-            view = null
-        }
+        stopCamera()
+        view = null
     }
 
     private fun startCamera() {
@@ -86,6 +65,7 @@ internal class Camera(
             != PackageManager.PERMISSION_GRANTED
         ) {
             requestPermission()
+            stop()
         } else {
             startCameraWithPermission()
         }
