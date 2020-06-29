@@ -3,12 +3,17 @@ package net.noiseinstitute.ethercam.video
 import android.content.Context
 import android.net.LocalSocket
 import android.net.LocalSocketAddress
-import java.io.FileDescriptor
+import java.io.Closeable
 import java.util.*
 
-class VideoPipe private constructor (public val fileDescriptor: FileDescriptor) {
+class VideoPipe private constructor(
+    private val sender: LocalSocket,
+    private val receiver: LocalSocket
+): Closeable {
+    val fileDescriptor = sender.fileDescriptor
+
     companion object {
-        public fun open(context: Context): VideoPipe {
+        fun open(context: Context): VideoPipe {
             val name = context.getFileStreamPath("VideoPipe" + UUID.randomUUID()).name
             val address = LocalSocketAddress(name, LocalSocketAddress.Namespace.FILESYSTEM)
 
@@ -18,7 +23,21 @@ class VideoPipe private constructor (public val fileDescriptor: FileDescriptor) 
             val sender = LocalSocket(LocalSocket.SOCKET_STREAM)
             sender.connect(address)
 
-            return VideoPipe(sender.fileDescriptor)
+            Thread {
+                val inputStream = receiver.inputStream.buffered()
+
+                while (!receiver.isClosed) {
+                    inputStream.readBytes()
+                }
+            }.start()
+
+            return VideoPipe(sender, receiver)
+        }
+    }
+
+    override fun close() {
+        receiver.use {
+            sender.close()
         }
     }
 }
