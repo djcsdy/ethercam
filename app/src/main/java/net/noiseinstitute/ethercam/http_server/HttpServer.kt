@@ -7,9 +7,11 @@ import java.io.InputStreamReader
 import java.io.OutputStreamWriter
 import java.net.ServerSocket
 
-private const val port = 8080
-
 class HttpServer {
+    private companion object {
+        private const val port = 8080
+    }
+
     fun start() {
         Thread(Runnable {
             while (true) {
