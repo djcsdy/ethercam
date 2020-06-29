@@ -6,9 +6,11 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import net.noiseinstitute.ethercam.R
 
-private const val PERMISSIONS_REQUEST_CAMERA = 0
-
 class CameraActivity : AppCompatActivity(), ActivityCompat.OnRequestPermissionsResultCallback {
+
+    private companion object {
+        private const val PERMISSIONS_REQUEST_CAMERA = 0
+    }
 
     private val camera = Camera(this) {
         ActivityCompat.requestPermissions(
