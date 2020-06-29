@@ -1,4 +1,4 @@
-package net.noiseinstitute.ethercam.video
+package net.noiseinstitute.ethercam.camera.pipe
 
 import android.content.Context
 import android.net.LocalSocket
@@ -9,7 +9,7 @@ import java.io.Closeable
 import java.util.*
 import kotlin.collections.HashSet
 
-class VideoPipe private constructor(
+class Pipe private constructor(
     private val sender: LocalSocket,
     private val receiver: LocalSocket,
     private val sinks: MutableSet<Sink>
@@ -18,7 +18,7 @@ class VideoPipe private constructor(
 
     companion object {
         @UiThread
-        fun open(context: Context): VideoPipe {
+        fun open(context: Context): Pipe {
             val name = context.getFileStreamPath("VideoPipe" + UUID.randomUUID()).name
             val address = LocalSocketAddress(name, LocalSocketAddress.Namespace.FILESYSTEM)
 
@@ -44,7 +44,7 @@ class VideoPipe private constructor(
                 }
             }.start()
 
-            return VideoPipe(sender, receiver, sinks)
+            return Pipe(sender, receiver, sinks)
         }
     }
 

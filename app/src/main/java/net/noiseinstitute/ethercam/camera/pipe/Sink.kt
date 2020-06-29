@@ -1,4 +1,4 @@
-package net.noiseinstitute.ethercam.video
+package net.noiseinstitute.ethercam.camera.pipe
 
 import androidx.annotation.WorkerThread
 
