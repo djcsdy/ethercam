@@ -1,4 +1,4 @@
-package net.noiseinstitute.ethercam.camera
+package net.noiseinstitute.ethercam.camera.parameters
 
 import android.app.Activity
 import android.hardware.Camera

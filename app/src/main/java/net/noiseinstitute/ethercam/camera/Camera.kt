@@ -10,6 +10,10 @@ import android.view.SurfaceView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import net.noiseinstitute.ethercam.camera.parameters.calculateAspectRatio
+import net.noiseinstitute.ethercam.camera.parameters.calculateDisplayOrientation
+import net.noiseinstitute.ethercam.camera.parameters.setAspectRatio
+import net.noiseinstitute.ethercam.camera.parameters.setFocusMode
 
 internal class Camera(
     private val activity: Activity,
@@ -86,7 +90,11 @@ internal class Camera(
         }
 
         updateOrientation()
-        camera?.let { setFocusMode(it) }
+        camera?.let {
+            setFocusMode(
+                it
+            )
+        }
         startPreview()
 
         previewSurfaceView?.holder?.addCallback(previewSurfaceCallback)
@@ -101,13 +109,24 @@ internal class Camera(
 
     private fun updateOrientation() {
         camera?.let { camera ->
-            val displayOrientation = calculateDisplayOrientation(activity)
+            val displayOrientation =
+                calculateDisplayOrientation(
+                    activity
+                )
             camera.setDisplayOrientation(displayOrientation)
             val previewSize = camera.parameters.previewSize
             layout?.let { layout ->
                 previewSurfaceView?.let { surfaceView ->
-                    val aspectRatio = calculateAspectRatio(previewSize, displayOrientation)
-                    setAspectRatio(layout, surfaceView, aspectRatio)
+                    val aspectRatio =
+                        calculateAspectRatio(
+                            previewSize,
+                            displayOrientation
+                        )
+                    setAspectRatio(
+                        layout,
+                        surfaceView,
+                        aspectRatio
+                    )
                 }
             }
         }

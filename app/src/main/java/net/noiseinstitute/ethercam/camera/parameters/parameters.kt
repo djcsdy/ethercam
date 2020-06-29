@@ -1,4 +1,4 @@
-package net.noiseinstitute.ethercam.camera
+package net.noiseinstitute.ethercam.camera.parameters
 
 import android.hardware.Camera
 
@@ -16,7 +16,9 @@ internal fun trySetParameters(
     try {
         camera.parameters = parameters
     } catch (e: RuntimeException) {
-        return TrySetParametersResult.Error(e)
+        return TrySetParametersResult.Error(
+            e
+        )
     }
     return TrySetParametersResult.Success
 }

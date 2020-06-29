@@ -1,4 +1,4 @@
-package net.noiseinstitute.ethercam.camera
+package net.noiseinstitute.ethercam.camera.parameters
 
 import android.hardware.Camera
 import android.util.Log
@@ -14,7 +14,9 @@ internal fun setFocusMode(camera: Camera) {
         .firstOrNull { parameters.supportedFocusModes.contains(it) }
         ?.let { focusMode ->
             when (val result =
-                trySetParameters(camera) {
+                trySetParameters(
+                    camera
+                ) {
                     it.focusMode = focusMode
                 }) {
                 is TrySetParametersResult.Error -> Log.w(
