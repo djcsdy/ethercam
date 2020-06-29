@@ -9,7 +9,7 @@ import java.io.Closeable
 import java.util.*
 import kotlin.collections.HashSet
 
-class Pipe private constructor(
+internal class Pipe private constructor(
     private val sender: LocalSocket,
     private val receiver: LocalSocket,
     private val sinks: MutableSet<Sink>
