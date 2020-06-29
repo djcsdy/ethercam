@@ -19,7 +19,7 @@ internal class Pipe private constructor(
     companion object {
         @UiThread
         fun open(context: Context): Pipe {
-            val name = context.getFileStreamPath("VideoPipe" + UUID.randomUUID()).name
+            val name = context.getFileStreamPath("VideoPipe" + UUID.randomUUID()).absolutePath
             val address = LocalSocketAddress(name, LocalSocketAddress.Namespace.FILESYSTEM)
 
             val receiver = LocalSocket(LocalSocket.SOCKET_STREAM)
