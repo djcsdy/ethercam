@@ -14,11 +14,22 @@ import net.noiseinstitute.ethercam.camera.parameters.calculateAspectRatio
 import net.noiseinstitute.ethercam.camera.parameters.calculateDisplayOrientation
 import net.noiseinstitute.ethercam.camera.parameters.setAspectRatio
 import net.noiseinstitute.ethercam.camera.parameters.setFocusMode
+import net.noiseinstitute.ethercam.camera.pipe.Pipe
+import net.noiseinstitute.ethercam.camera.pipe.Sink
+import java.io.Closeable
 
-internal class Camera(
+internal class Camera private constructor(
+    private val pipe: Pipe,
     private val activity: Activity,
     private val requestPermission: () -> Unit
-) {
+) : Closeable {
+    companion object {
+        fun open(activity: Activity, requestPermission: () -> Unit): Camera {
+            val pipe = Pipe.open(activity)
+            return Camera(pipe, activity, requestPermission)
+        }
+    }
+
     private var camera: android.hardware.Camera? = null
     private var layout: ConstraintLayout? = null
     private var previewSurfaceView: SurfaceView? = null
@@ -69,6 +80,16 @@ internal class Camera(
 
         layout = null
         previewSurfaceView = null
+    }
+
+    fun pipe(sink: Sink) {
+        pipe.pipe(sink)
+    }
+
+    override fun close() {
+        pipe.use {
+            stop()
+        }
     }
 
     private fun startCamera() {
