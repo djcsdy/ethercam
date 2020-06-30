@@ -13,7 +13,7 @@ class HttpServer {
     }
 
     fun start() {
-        Thread(Runnable {
+        Thread {
             while (true) {
                 try {
                     ServerSocket(port).use { socket ->
@@ -54,6 +54,6 @@ class HttpServer {
                     Log.e("Ethercam", "Socket error", e)
                 }
             }
-        }).start()
+        }.start()
     }
 }
